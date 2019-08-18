@@ -1,7 +1,7 @@
 import datetime
 
-from django.db import models
 from django.utils import timezone
+from django.db import models
 
 
 class Question(models.Model):
@@ -26,6 +26,7 @@ class Question(models.Model):
         if not hasattr(self, '_choices'):
             self._choices = self.choice_set.all()
         return self._choices
+
 
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)

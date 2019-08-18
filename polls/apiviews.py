@@ -57,4 +57,15 @@ def choices_view(request, question_id):
         choice = serializer.save(question=question)
         return Response(ChoiceSerializer(choice).data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PATCH'])
+def vote_view(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    serializer = VoteSerializer(data=request.data)
+    if serializer.is_valid():
+        choice = get_object_or_404(Choice, pk=serializer.validated_data['choice_id'], question=question)
+        choice.votes += 1
+        choice.save()
+        return Response("Voted")
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
